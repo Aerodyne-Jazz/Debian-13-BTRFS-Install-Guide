@@ -78,6 +78,7 @@ This part requires manual configuration via the terminal. Here's how:
     mount -o noatime,compress=zstd,subvolume=@log /your/drivepath /target/var/log
     mount -o noatime,compress=zstd,subvolume=@var /your/drivepath /target/var/cache
     ```
+    Here I used zstd compression since it has been the most tested, but you have other options like lzo and zlib.
 
 ---
 
@@ -90,8 +91,13 @@ This part requires manual configuration via the terminal. Here's how:
 
 2. **Modify Mount Entries**: For each mount point (e.g., `/home`, `/`, etc.), replace the default options with:
     ```bash
-    /home    btrfs    noatime,compress=zstd,subvol=@home   0    1
+    /            btrfs  noatime,compress=zstd,subvol=@   0    1
+    /home        btrfs  noatime,compress=zstd,subvol=@home   0    1
+    /.snapshots  btrfs  noatime,compress=zstd,subvol=@snapshots   0    1
+    /var/log     btrfs  noatime,compress=zstd,subvol=@log   0    1
+    /var/cache   btrfs  noatime,compress=zstd,subvol=@var   0    1
     ```
+    I used compression level 1 for this, but you can use as aggressive of a compression as you'd like.
 
 3. **Save and Exit**: Press `Ctrl+O`, hit `Enter`, and then `Ctrl+X` to exit Nano.
 
