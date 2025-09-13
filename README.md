@@ -97,7 +97,7 @@ This part requires manual configuration via the terminal. Here's how:
     /var/log     btrfs  noatime,compress=zstd,subvol=@log   0    1
     /var/cache   btrfs  noatime,compress=zstd,subvol=@var   0    1
     ```
-    I used compression level 1 for this, but you can use as aggressive of a compression as you'd like.
+    The last digit at the end of each line is for the filesystem integrity test order that fsck runs on boot. We have them all set to 1 to represent the root filesystem, since fsck runs through root first and we want these included. Other options available are 2 (secondary) priority, or 0 to disable bootup check on a drive altogether.
 
 3. **Save and Exit**: Press `Ctrl+O`, hit `Enter`, and then `Ctrl+X` to exit Nano.
 
