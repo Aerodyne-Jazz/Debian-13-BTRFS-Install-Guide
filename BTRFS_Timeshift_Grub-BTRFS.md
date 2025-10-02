@@ -99,7 +99,9 @@ This part requires manual configuration via the terminal. Here's how:
     /var/cache   btrfs  noatime,compress=zstd,subvol=@var   0    0
     ```
    Here we didn't add a level for `zstd` to compress to, because leaving out any indicator will default it to `zstd:3`, which is a good middle ground of cpu performance and amount of compression. If you want to manually adjust this, the range can go from `-7` for the least but fastest compression, or to `22` for the slowest but most compression.
+   
    The last digit at the end of each line is for the filesystem integrity test level setting that `fsck` runs on boot. We have them all set to `0` to ommit `fsck` from checking the subvolumes, as the integrity checks on boot are only needed on other filesystems. The `btrfs` filesystem already has integrity checks built into it, and not just on boot, so running `fsck` isn't necessary and doesn't even function the same.
+   
    We have `noatime` so there isn't updates to file metadata everytime a file is accessed, which increases performance. Additionally, you can add`ssd` if you are using one which will provide ssd specific performance boosts. The filesystem can normally detect and enable `ssd` without you putting it into your `fstab` file, but it doesn't hurt to explicitly add it. If you want to know all the options you have available, you can read about them on the [BTRFS Administration Documentation](https://btrfs.readthedocs.io/en/latest/Administration.html#mount-options).
 
 4. **Save and Exit**: Press `Ctrl+O`, hit `Enter`, and then `Ctrl+X` to exit Nano.
