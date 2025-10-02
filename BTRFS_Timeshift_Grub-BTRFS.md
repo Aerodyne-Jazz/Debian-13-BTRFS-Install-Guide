@@ -6,7 +6,7 @@
 
 ## Does Debian 13 not offer BTRFS as an option?
 
-Yes, technically. The catch is that Debian 13 does not provide an out-of-the-box option for `btrfs` subvolume creation during installation. It only creates a `/` and `/home` subvolume when `btrfs` is selected, which is a totally viable option and then paired with `btrfs-assistant`, but we want additional subvolumes created and to use `Timeshift` as our snapshots scheduler, so we will be performing a manual installation. Also, Debian still defaults to `ext4` for the filesysem, which is a rocksolid choice due to it being a well tested and optimized filesystem. Since `btrfs` is relatively new in comparison, and [still has certain features that are unstable or unrefined](https://btrfs.readthedocs.io/en/latest/Status.html), it is still not the ideal choice for what the Debian project predominately serves. However, by sticking to the stable features of `btrfs`, we can still enjoy the benefits of this newer file system without issues.
+Yes, technically. The catch is that Debian 13 does not provide an out-of-the-box option for `btrfs` subvolume creation during installation. It only creates a `/` and `/home` subvolume when `btrfs` is selected, which is a totally viable option and when paired with `btrfs-assistant` for snapshots, but we want additional subvolumes created and to use `Timeshift` as our snapshots scheduler so we will be performing a manual installation. Also, Debian still defaults to `ext4` for the filesysem, which is a rocksolid choice due to it being a well tested and optimized filesystem. Since `btrfs` is relatively new in comparison, and [still has certain features that are unstable or unrefined](https://btrfs.readthedocs.io/en/latest/Status.html), it is still not the ideal choice for what the Debian project predominately serves. However, by sticking to the stable features of `btrfs`, we can still enjoy the benefits of this newer file system without issues.
 
 ## What is Timeshift?
 
@@ -92,15 +92,17 @@ This part requires manual configuration via the terminal. Here's how:
 
 2. **Modify Mount Entries**: For each mount point (e.g., `/home`, `/`, etc.), replace the default options with:
     ```bash
-    /            btrfs  noatime,compress=zstd,subvol=@   0    1
-    /home        btrfs  noatime,compress=zstd,subvol=@home   0    1
-    /.snapshots  btrfs  noatime,compress=zstd,subvol=@snapshots   0    1
-    /var/log     btrfs  noatime,compress=zstd,subvol=@log   0    1
-    /var/cache   btrfs  noatime,compress=zstd,subvol=@var   0    1
+    /            btrfs  noatime,compress=zstd,subvol=@   0    0
+    /home        btrfs  noatime,compress=zstd,subvol=@home   0    0
+    /.snapshots  btrfs  noatime,compress=zstd,subvol=@snapshots   0    0
+    /var/log     btrfs  noatime,compress=zstd,subvol=@log   0    0
+    /var/cache   btrfs  noatime,compress=zstd,subvol=@var   0    0
     ```
-    The last digit at the end of each line is for the filesystem integrity test order that `fsck` runs on boot. We have them all set to `1` to represent the root filesystem, since `fsck` runs through root first and we want these included. Other options available are `2` (secondary) priority, or `0` to disable bootup check on a drive altogether.
+   Here we didn't add a level for `zstd` to compress to, because leaving out any indicator will default it to `zstd:3`, which is a good middle ground of cpu performance and amount of compression. If you want to manually adjust this, the range can go from `-7` for the least but fastest compression, or to `22` for the slowest but most compression.
+   The last digit at the end of each line is for the filesystem integrity test level setting that `fsck` runs on boot. We have them all set to `0` to ommit `fsck` from checking the subvolumes, as the integrity checks on boot are only needed on other filesystems. The `btrfs` filesystem already has integrity checks built into it, and not just on boot, so running `fsck` isn't necessary and doesn't even function the same.
+   We have `noatime` so there isn't updates to file metadata everytime a file is accessed, which increases performance. Additionally, you can add`ssd` if you are using one which will provide ssd specific performance boosts. The filesystem can normally detect and enable `ssd` without you putting it into your `fstab` file, but it doesn't hurt to explicitly add it. If you want to know all the options you have available, you can read about them on the [BTRFS Administration Documentation](https://btrfs.readthedocs.io/en/latest/Administration.html#mount-options).
 
-3. **Save and Exit**: Press `Ctrl+O`, hit `Enter`, and then `Ctrl+X` to exit Nano.
+4. **Save and Exit**: Press `Ctrl+O`, hit `Enter`, and then `Ctrl+X` to exit Nano.
 
 ---
 
