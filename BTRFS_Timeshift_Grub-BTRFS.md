@@ -6,7 +6,9 @@
 
 ## Does Debian 13 not offer BTRFS as an option?
 
-Yes, technically. The catch is that Debian 13 does not provide an out-of-the-box option for `btrfs` subvolume creation during installation. It only creates a `/` and `/home` subvolume when `btrfs` is selected, which is a totally viable option and when paired with `btrfs-assistant` for snapshots, but we want additional subvolumes created and to use `Timeshift` as our snapshots scheduler so we will be performing a manual installation. Also, Debian still defaults to `ext4` for the filesysem, which is a rocksolid choice due to it being a well tested and optimized filesystem. Since `btrfs` is relatively new in comparison, and [still has certain features that are unstable or unrefined](https://btrfs.readthedocs.io/en/latest/Status.html), it is still not the ideal choice for what the Debian project predominately serves. However, by sticking to the stable features of `btrfs`, we can still enjoy the benefits of this newer file system without issues.
+Yes, technically. The catch is that Debian 13 does not provide an out-of-the-box option for `btrfs` subvolume creation during installation. It only creates a `/` and `/home` subvolume when `btrfs` is selected, which is a totally viable option when paired with `btrfs-assistant` for snapshots, but we want additional subvolumes created. Additionally we want to use `Timeshift` as our snapshots scheduler, which requires some further tweaks, so we will be performing a manual installation.
+
+It is still common for Debian desktop installs to go with an `ext4` filesysem, which is a rocksolid choice in its own right due to it being a well tested and optimized. Since `btrfs` is newer in comparison, and [still has certain features that are unstable or unrefined](https://btrfs.readthedocs.io/en/latest/Status.html), it is still not the ideal choice for what the Debian project predominately serves. This is why there aren't feature rich options for a `btrfs` subvolume setup in their installer yet. However, by sticking to the stable features of `btrfs`, we can still enjoy the benefits of this file system without issues.
 
 ## What is Timeshift?
 
