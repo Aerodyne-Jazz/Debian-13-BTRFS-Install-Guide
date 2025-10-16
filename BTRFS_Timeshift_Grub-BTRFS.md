@@ -75,11 +75,11 @@ This part requires manual configuration via the terminal. Here's how:
 7. **Mount Subvolumes**: Mount the root subvolume first, and then other subvolumes:
     ```bash
     #Remember to replace /your/drivepath/ with your actual path
-    mount -o noatime,compress=zstd,subvolume=@ /your/drivepath /target
-    mount -o noatime,compress=zstd,subvolume=@home /your/drivepath /target/home
-    mount -o noatime,compress=zstd,subvolume=@snapshots /your/drivepath /target/.snapshots
-    mount -o noatime,compress=zstd,subvolume=@log /your/drivepath /target/var/log
-    mount -o noatime,compress=zstd,subvolume=@var /your/drivepath /target/var/cache
+    mount -o noatime,compress=zstd,subvol=@ /your/drivepath /target
+    mount -o noatime,compress=zstd,subvol=@home /your/drivepath /target/home
+    mount -o noatime,compress=zstd,subvol=@snapshots /your/drivepath /target/.snapshots
+    mount -o noatime,compress=zstd,subvol=@log /your/drivepath /target/var/log
+    mount -o noatime,compress=zstd,subvol=@var /your/drivepath /target/var/cache
     ```
     Here I used `zstd` compression since it has been the most tested, but you have other options like `lzo` and `zlib`.
 
